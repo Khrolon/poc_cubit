@@ -1,8 +1,13 @@
-abstract class HomeState {}
-
-class InitialHomeState extends HomeState {}
-
-class ContadorHomeState extends HomeState {
+class HomeState {
   final int valor;
-  ContadorHomeState({required this.valor});
+
+  const HomeState({this.valor = 0});
+
+  HomeState copyWith({
+    int? valor,
+  }) {
+    return HomeState(
+      valor: valor ?? 0,
+    );
+  }
 }

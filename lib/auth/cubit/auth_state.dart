@@ -1,11 +1,28 @@
-import 'package:flutter/material.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class AuthState {}
+enum AuthStateStatus { initialAuth, loadingAuth, workAuth, errorAuth }
 
-class InitialAuthState extends AuthState {}
+class AuthState extends Equatable {
+  final String email;
+  final String password;
+  final AuthStateStatus status;
 
-class LoadingAuthState extends AuthState {}
+  const AuthState(
+      {this.email = '',
+      this.password = '',
+      this.status = AuthStateStatus.initialAuth});
 
-class WorkAuthState extends AuthState {}
+  @override
+  List<Object?> get props => [email, password, status];
 
-class ErrorAuthState extends AuthState {}
+  AuthState copyWith({
+    String? email,
+    String? password,
+    AuthStateStatus? status,
+  }) {
+    return AuthState(
+        email: email ?? this.email,
+        status: status ?? this.status,
+        password: password ?? this.password);
+  }
+}

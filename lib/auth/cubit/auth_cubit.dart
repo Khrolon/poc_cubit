@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:poc_cubit/auth/cubit/auth_state.dart';
@@ -11,18 +13,23 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit(this.authRepository)
       : emailController = TextEditingController(),
         passwordController = TextEditingController(),
-        super(InitialAuthState());
+        super(const AuthState());
 
   Future<void> validateLogin() async {
-    emit(LoadingAuthState());
+    emit(state.copyWith(
+      email: emailController.text,
+      password: passwordController.text,
+      status: AuthStateStatus.loadingAuth,
+    ));
 
-    bool validade = await authRepository.logIn(
-        emailController.text, passwordController.text);
-
-    if (validade) {
-      emit(WorkAuthState());
-    } else {
-      emit(ErrorAuthState());
+    try {
+      await authRepository.logIn(
+        state.email,
+        state.password,
+      );
+      emit(state.copyWith(status: AuthStateStatus.workAuth));
+    } catch (e) {
+      emit(state.copyWith(status: AuthStateStatus.errorAuth));
     }
   }
 }

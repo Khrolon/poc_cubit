@@ -9,7 +9,7 @@ class AuthRepository implements IAuthRepository {
     if (email == 'vitor' && password == '123') {
       return true;
     } else {
-      return false;
+      throw Error();
     }
   }
 }

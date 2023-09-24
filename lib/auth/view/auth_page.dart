@@ -4,7 +4,7 @@ import 'package:poc_cubit/auth/cubit/auth_cubit.dart';
 import 'package:poc_cubit/auth/cubit/auth_state.dart';
 
 class AuthPage extends StatelessWidget {
-  AuthPage({super.key});
+  const AuthPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,20 +13,19 @@ class AuthPage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Login'),
       ),
-      body: BlocListener<AuthCubit, AuthState>(
-          listener: (BuildContext context, AuthState state) {
-        if (state is ErrorAuthState) {
+      body: BlocListener<AuthCubit, AuthState>(listener: (context, state) {
+        if (state.status == AuthStateStatus.errorAuth ) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Erro ao logar'),
             ),
           );
         }
-        if (state is WorkAuthState) {
+        if (state.status == AuthStateStatus.workAuth) {
           Navigator.pushNamed(context, '/home');
         }
       }, child: BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-        if (state is LoadingAuthState) {
+        if (state.status == AuthStateStatus.loadingAuth) {
           return const Center(
             child: CircularProgressIndicator(),
           );
